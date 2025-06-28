@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,21 @@ import {
   Activity,
   UserPlus
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const DoctorDashboard = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Feature Access",
+      description: `Opening ${action}...`,
+    });
+    console.log(`Doctor action: ${action}`);
+  };
+
   const doctorStats = [
     {
       title: "Today's Patients",
@@ -65,7 +77,10 @@ const DoctorDashboard = () => {
           <h2 className="text-2xl font-bold text-gray-900">Doctor Dashboard</h2>
           <p className="text-gray-600">Patient care and medical management</p>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
+        <Button 
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => handleAction("New Patient Registration")}
+        >
           <UserPlus className="h-4 w-4 mr-2" />
           New Patient
         </Button>
@@ -148,19 +163,35 @@ const DoctorDashboard = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button className="justify-start" variant="outline">
+            <Button 
+              className="justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Write Prescription")}
+            >
               <FileText className="h-4 w-4 mr-2" />
               Write Prescription
             </Button>
-            <Button className="justify-start" variant="outline">
+            <Button 
+              className="justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Patient Records")}
+            >
               <Users className="h-4 w-4 mr-2" />
               Patient Records
             </Button>
-            <Button className="justify-start" variant="outline">
+            <Button 
+              className="justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Schedule Appointment")}
+            >
               <Calendar className="h-4 w-4 mr-2" />
               Schedule Appointment
             </Button>
-            <Button className="justify-start" variant="outline">
+            <Button 
+              className="justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Lab Results")}
+            >
               <Heart className="h-4 w-4 mr-2" />
               Lab Results
             </Button>

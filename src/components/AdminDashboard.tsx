@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,22 @@ import {
   Database,
   AlertTriangle
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Feature Access",
+      description: `Opening ${action}...`,
+    });
+    // You can add specific navigation logic here for each action
+    console.log(`Admin action: ${action}`);
+  };
+
   const adminStats = [
     {
       title: "Total Users",
@@ -58,7 +71,10 @@ const AdminDashboard = () => {
           <h2 className="text-2xl font-bold text-gray-900">Admin Dashboard</h2>
           <p className="text-gray-600">System administration and management</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button 
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={() => handleAction("System Settings")}
+        >
           <Settings className="h-4 w-4 mr-2" />
           System Settings
         </Button>
@@ -117,19 +133,35 @@ const AdminDashboard = () => {
             <CardDescription>System management tools</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("User Management")}
+            >
               <Users className="h-4 w-4 mr-2" />
               Manage Users
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Security Settings")}
+            >
               <Shield className="h-4 w-4 mr-2" />
               Security Settings
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("System Reports")}
+            >
               <FileText className="h-4 w-4 mr-2" />
               System Reports
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Database Management")}
+            >
               <Database className="h-4 w-4 mr-2" />
               Database Management
             </Button>

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,28 @@ import {
   Phone,
   User
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const PatientDashboard = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Feature Access",
+      description: `Opening ${action}...`,
+    });
+    console.log(`Patient action: ${action}`);
+  };
+
+  const handleCall = (doctor: string) => {
+    toast({
+      title: "Calling Doctor",
+      description: `Connecting you with ${doctor}...`,
+    });
+  };
+
   const patientStats = [
     {
       title: "Next Appointment",
@@ -70,7 +89,10 @@ const PatientDashboard = () => {
           <h2 className="text-2xl font-bold text-gray-900">Patient Portal</h2>
           <p className="text-gray-600">Your health information and appointments</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button 
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={() => handleAction("Book Appointment")}
+        >
           <Calendar className="h-4 w-4 mr-2" />
           Book Appointment
         </Button>
@@ -112,7 +134,11 @@ const PatientDashboard = () => {
                   <p className="text-xs text-gray-500">{appointment.date} at {appointment.time}</p>
                   <p className="text-xs text-blue-600">{appointment.type}</p>
                 </div>
-                <Button size="sm" variant="outline">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => handleCall(appointment.doctor)}
+                >
                   <Phone className="h-3 w-3 mr-1" />
                   Call
                 </Button>
@@ -181,19 +207,35 @@ const PatientDashboard = () => {
             <CardDescription>Common patient tasks</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Schedule Appointment")}
+            >
               <Calendar className="h-4 w-4 mr-2" />
               Schedule Appointment
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("View Medical Records")}
+            >
               <FileText className="h-4 w-4 mr-2" />
               View Medical Records
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Request Prescription Refill")}
+            >
               <Pill className="h-4 w-4 mr-2" />
               Request Prescription Refill
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => handleAction("Contact Doctor")}
+            >
               <Phone className="h-4 w-4 mr-2" />
               Contact Doctor
             </Button>
