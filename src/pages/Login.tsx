@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,17 +5,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Activity, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Activity, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth, UserRole } from "@/contexts/AuthContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "" as UserRole | "",
     rememberMe: false
   });
 
@@ -28,23 +31,27 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    if (!formData.role) {
+      toast({
+        title: "Role Required",
+        description: "Please select your role to continue.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
     // Simulate login process
     setTimeout(() => {
       console.log("Login attempt:", formData);
       
-      // Simple validation for demo
-      if (formData.email && formData.password.length >= 6) {
+      const success = login(formData.email, formData.password, formData.role as UserRole);
+      
+      if (success) {
         toast({
           title: "Login Successful!",
-          description: "Welcome back to SmartClinic.",
+          description: `Welcome back to SmartClinic, ${formData.role}.`,
         });
-        
-        // Store user session (in real app, this would be handled by proper auth)
-        localStorage.setItem("smartclinic_user", JSON.stringify({
-          email: formData.email,
-          loginTime: new Date().toISOString()
-        }));
-        
         navigate("/home");
       } else {
         toast({
@@ -86,6 +93,24 @@ const Login = () => {
                 placeholder="Enter your email address"
                 className="h-11"
               />
+            </div>
+
+            {/* Role Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="role" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Login as
+              </Label>
+              <Select onValueChange={(value) => handleInputChange("role", value as UserRole)}>
+                <SelectTrigger className="h-11">
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Administrator</SelectItem>
+                  <SelectItem value="doctor">Doctor</SelectItem>
+                  <SelectItem value="patient">Patient</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Password */}

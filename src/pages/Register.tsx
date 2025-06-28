@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Activity, User, Mail, Lock, Building, UserCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { UserRole } from "@/contexts/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "",
+    role: "" as UserRole | "",
     department: "",
     licenseNumber: ""
   });
@@ -47,6 +47,16 @@ const Register = () => {
       toast({
         title: "Weak Password",
         description: "Password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.role) {
+      toast({
+        title: "Role Required",
+        description: "Please select your role in the system.",
         variant: "destructive",
       });
       setIsLoading(false);
@@ -131,16 +141,14 @@ const Register = () => {
                   <UserCheck className="h-4 w-4" />
                   Role
                 </Label>
-                <Select onValueChange={(value) => handleInputChange("role", value)}>
+                <Select onValueChange={(value) => handleInputChange("role", value as UserRole)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="admin">Administrator</SelectItem>
                     <SelectItem value="doctor">Doctor</SelectItem>
-                    <SelectItem value="nurse">Nurse</SelectItem>
-                    <SelectItem value="technician">Technician</SelectItem>
-                    <SelectItem value="administrator">Administrator</SelectItem>
-                    <SelectItem value="receptionist">Receptionist</SelectItem>
+                    <SelectItem value="patient">Patient</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
